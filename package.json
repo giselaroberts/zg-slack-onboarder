@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "echo 'Netlify handles functions build'",
+    "dev": "netlify dev",
+    "start": "node -r ts-node/register src/index.ts"
   },
   "repository": {
     "type": "git",
@@ -23,7 +26,6 @@
     "dotenv": "^16.5.0"
   },
   "devDependencies": {
-    "@netlify/functions": "^4.0.0",
     "@types/node": "^22.15.21",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"

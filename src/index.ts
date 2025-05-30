@@ -1,14 +1,19 @@
 console.log("script loaded, starting......")
 //Import libraries
-import {App, LogLevel} from "@slack/bolt";
+import type {Handler, HandlerEvent, HandlerContext, HandlerCallback} from "@netlify/functions";
+import {App, AwsLambdaReceiver} from "@slack/bolt";
 import "dotenv/config";
+
+//Bolt receiver built for Lambda works for Netlify functions too ->
+const receiver = new AwsLambdaReceiver({
+    signingSecret: process.env.SLACK_SIGNING_SECRET!,
+
+});
 
 //create Bolt app instance
 const app = new App({
     token:      process.env.SLACK_BOT_TOKEN, //bot OAuth token
-    appToken:   process.env.SLACK_APP_TOKEN, //app-level Socket token
-    socketMode: true,                        //use WebSocket, no public URL needed
-    logLevel:   LogLevel.INFO,               //show info-level logs in console
+    receiver,
 });
 
 
@@ -19,7 +24,7 @@ const WORKFLOW = process.env.WORKFLOW_LINK!;
 
 //event handler - once per new slack member
 app.event("team_join", async ({event, client, logger}) => {
-const user: any = event.user; //payload carries the new user object
+    const user: any = event.user; //payload carries the new user object
 
     //skip guest accounts - multi-channel or single-channel
     if (user.is_restricted || user.is_ultra_restricted) return;
@@ -50,9 +55,9 @@ const user: any = event.user; //payload carries the new user object
     });
 });
 
-//start the socket connection
+//Netlify Function export 
 
-(async () => {
-    await app.start();
-    console.log("Onboard-bot running");
-})();
+export const handler: Handler = async (event: HandlerEvent, context: HandlerContext) => {
+    const lambdaHandler = await receiver.start();
+    return lambdaHandler(event as any, context as any, () => undefined);
+};
