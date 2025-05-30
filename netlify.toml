@@ -4,5 +4,5 @@
 
 [[redirects]]
   from = "/slack/events"
-  to = "/.netlify/functions/slack.events"
+  to = "/.netlify/functions/slack-events"
   status = 200
