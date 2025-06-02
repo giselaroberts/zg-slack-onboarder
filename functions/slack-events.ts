@@ -28,9 +28,8 @@ const ALLOWEDU = new Set ([
 //event handler - once per new slack member
 app.event("user_change", async ({event, client, logger}) => {
     const user: any = event.user; // carries the new user object
-    console.log(user)
 
-    if (!ALLOWEDU.has(user)) return;
+    if (!ALLOWEDU.has(user.id)) return;
 
     //skip guest accuounts - multi-channel or single-channel
     if (user.is_restricted || user.is_ultra_restricted) return;
