@@ -53,6 +53,7 @@ app.event("team_join", async ({event, client, logger}) => {
             }]
         }]
     });
+    console.log("sent DM")
 });
 
 //Netlify Function export 
