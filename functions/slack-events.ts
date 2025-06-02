@@ -21,20 +21,18 @@ const app = new App({
 const FIELD_ID = process.env.MANAGER_FIELD_ID!; //'!' tells ts it will exist
 const WORKFLOW = process.env.WORKFLOW_LINK!;
 
-const ALLOWEDCH = new Set ([
-    "C08THPZ51DG",
+const ALLOWEDU = new Set ([
+    "U08SMCV0TEK",
 ]);
 
 //event handler - once per new slack member
-app.event("reaction_added", async ({event, client, logger}) => {
-    const channelId: any = event.item.channel;
-    console.log(channelId)
+app.event("user_change", async ({event, client, logger}) => {
     const user: any = event.user; // carries the new user object
     console.log(user)
 
-    if (!ALLOWEDCH.has(channelId)) return;
+    if (!ALLOWEDU.has(user)) return;
 
-    //skip guest accounts - multi-channel or single-channel
+    //skip guest accuounts - multi-channel or single-channel
     if (user.is_restricted || user.is_ultra_restricted) return;
         
     //fetch the user's full profile so we can see manager field
