@@ -47,10 +47,30 @@ app.event("user_change", async ({event, client, logger}) => {
 
     //send manager a DM with a button that opens to workflow link
     await client.chat.postMessage({
+
         channel: managerID,
-        text: " This Bot is in testing, please ignore. *\n\n" + 
-        `User <@${user.id}> just joined. This bot helps you add <@${user.id}> to multiple channels at once` +
-        `<${process.env.WORKFLOW!}|Add <@${user.id}> to channels>` 
+        text: 'A new teammate <@${user.id}> just joined. Add them to channels?',
+        blocks: [
+            {
+            type: "section",
+            text: {
+                type: "mrkdwn",
+                text: "This Bot is in testing, please ignore. \n\n" + 
+                    `User <@${user.id}> just joined. This bot helps you add <@${user.id}> to multiple channels at once`
+                
+                    }   
+            },
+            {
+            type: "actions",
+            elements: [{
+                type: "button",
+                text: {type: "plain_text", text: "Add to channels:"},
+                url: WORKFLOW, 
+                value: user.id //optional metadata string the workflow can read
+            }]
+            }
+        ]
+
     });
     console.log("sent DM")
 });
