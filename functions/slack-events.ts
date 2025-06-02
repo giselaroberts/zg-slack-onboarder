@@ -27,8 +27,8 @@ const ALLOWEDCH = new Set ([
 
 //event handler - once per new slack member
 app.event("reaction_added", async ({event, client, logger}) => {
-    const channelId = (event as any).item.channel;
-     const user: any = event.user; // carries the new user object
+    const channelId: any = event.item.channel;
+    const user: any = event.user; // carries the new user object
 
     if (!ALLOWEDCH.has(channelId)) return;
 
@@ -41,7 +41,7 @@ app.event("reaction_added", async ({event, client, logger}) => {
 
     //Is this the correct wat to handle this case??
     if(!managerID){
-            logger.warn('No Manager set for $(user.id}');
+            logger.warn(`No Manager set for ${user.id}`);
             return;                 //quit if no manager
        }
 
