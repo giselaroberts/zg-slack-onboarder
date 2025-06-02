@@ -28,7 +28,9 @@ const ALLOWEDCH = new Set ([
 //event handler - once per new slack member
 app.event("reaction_added", async ({event, client, logger}) => {
     const channelId: any = event.item.channel;
+    console.log(channelId)
     const user: any = event.user; // carries the new user object
+    console.log(user)
 
     if (!ALLOWEDCH.has(channelId)) return;
 
