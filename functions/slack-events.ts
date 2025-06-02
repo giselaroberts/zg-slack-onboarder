@@ -1,4 +1,4 @@
-console.log("script loaded, starting......")
+/*console.log("script loaded, starting......")
 //Import libraries
 import type {Handler, HandlerEvent, HandlerContext, HandlerCallback} from "@netlify/functions";
 import {App, AwsLambdaReceiver, LogLevel} from "@slack/bolt";
@@ -62,4 +62,4 @@ app.event("team_join", async ({event, client, logger}) => {
 export const handler: Handler = async (event: HandlerEvent, context: HandlerContext) => {
     const lambdaHandler = await receiver.start();
     return lambdaHandler(event as any, context as any, () => undefined);
-};
+};*/
