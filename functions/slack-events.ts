@@ -29,7 +29,7 @@ const ALLOWEDU = new Set ([
 app.event("user_change", async ({event, client, logger}) => {
     const user: any = event.user; // carries the new user object
     console.log(user.id)
-    
+
     if (!ALLOWEDU.has(user.id)) return;
 
     //skip guest accuounts - multi-channel or single-channel
@@ -48,16 +48,9 @@ app.event("user_change", async ({event, client, logger}) => {
     //send manager a DM with a button that opens to workflow link
     await client.chat.postMessage({
         channel: managerID,
-        text: 'A new teammate <@${user.id}> just joined. Add them to channels?',
-        blocks: [{
-            type: "actions",
-            elements: [{
-                type: "button",
-                text: {type: "plain_text", text: "Add to channels:"},
-                url: WORKFLOW, 
-                value: user.id //optional metadata string the workflow can read
-            }]
-        }]
+        text: " This Bot is in testing, please ignore. *\n\n" + 
+        `User <@${user.id}> just joined. This bot helps you add <@${user.id}> to multiple channels at once` +
+        `<${process.env.WORKFLOW!}|Add <@${user.id}> to channels>` 
     });
     console.log("sent DM")
 });
