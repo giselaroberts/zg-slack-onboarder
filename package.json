@@ -22,11 +22,13 @@
   },
   "homepage": "https://github.com/giselaroberts/zg-slack-onboarder#readme",
   "dependencies": {
+    "@netlify/functions": "^1.6.0",
     "@slack/bolt": "^4.4.0",
     "dotenv": "^16.5.0"
   },
   "devDependencies": {
     "@types/node": "^22.15.21",
+    "@types/node-fetch": "^2.6.12",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   }

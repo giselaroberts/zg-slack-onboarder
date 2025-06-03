@@ -2,6 +2,7 @@
 import type {Handler, HandlerEvent, HandlerContext, HandlerCallback} from "@netlify/functions";
 import {App, AwsLambdaReceiver, LogLevel} from "@slack/bolt";
 import "dotenv/config";
+import fetch from "node-fetch";
 
 //Bolt receiver built for Lambda works for Netlify functions too ->
 const receiver = new AwsLambdaReceiver({
@@ -19,7 +20,8 @@ const app = new App({
 
 //shortcuts to env values
 const FIELD_ID = process.env.MANAGER_FIELD_ID!; //'!' tells ts it will exist
-const WORKFLOW = process.env.WORKFLOW_LINK!;
+//const WORKFLOW = process.env.WORKFLOW_LINK!;
+const WORKFLOW_TRIGGER= process.env.WORKFLOW_TRIGGER_LINK!;
 
 const ALLOWEDU = new Set ([
     "U08SMCV0TEK",
@@ -29,12 +31,6 @@ const ALLOWEDU = new Set ([
 app.event("user_change", async ({event, client, logger}) => {
     const user: any = event.user; // carries the new user object
     console.log(user.id)
-
-    if (!ALLOWEDU.has(user.id)) return;
-
-    //skip guest accuounts - multi-channel or single-channel
-    if (user.is_restricted || user.is_ultra_restricted) return;
-        
     //fetch the user's full profile so we can see manager field
     const prof = await client.users.profile.get({user: user.id});
     const managerID: string | undefined = prof.profile?.fields?.[FIELD_ID]?.value;
@@ -45,12 +41,28 @@ app.event("user_change", async ({event, client, logger}) => {
             return;                 //quit if no manager
        }
 
+    if (!ALLOWEDU.has(user.id)) return;
+
+    //skip guest accuounts - multi-channel or single-channel
+    if (user.is_restricted || user.is_ultra_restricted) return;
+
+    await fetch(WORKFLOW_TRIGGER, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            userID: user.id,
+            managerID: managerID
+        })
+    });
+        
+    
+
     //send manager a DM with a button that opens to workflow link
     await client.chat.postMessage({
 
         channel: managerID,
         text: 'A new teammate <@${user.id}> just joined. Add them to channels?',
-        blocks: [
+        /*blocks: [
             {
             type: "section",
             text: {
@@ -69,7 +81,7 @@ app.event("user_change", async ({event, client, logger}) => {
                 value: user.id //optional metadata string the workflow can read
             }]
             }
-        ]
+        ]*/
 
     });
     console.log("sent DM")
