@@ -50,10 +50,10 @@ app.event("user_change", async ({event, client, logger}) => {
     const payload = {
         inputs:{
             userID: {
-                value: user.id
+                value: "U08SMCV0TEK"//user.id
             },
             managerID: {
-                value: managerId
+                value: "U081D2JG5AB"//managerId
             }
         }
     }
