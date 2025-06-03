@@ -31,6 +31,12 @@ const ALLOWEDU = new Set ([
 app.event("user_change", async ({event, client, logger}) => {
     const user: any = event.user; // carries the new user object
     console.log(user.id)
+
+    if (!ALLOWEDU.has(user.id)) return;
+
+    //skip guest accuounts - multi-channel or single-channel
+    if (user.is_restricted || user.is_ultra_restricted) return;
+
     //fetch the user's full profile so we can see manager field
     const prof = await client.users.profile.get({user: user.id});
     const managerId: string | undefined = prof.profile?.fields?.[FIELD_ID]?.value;
@@ -40,24 +46,19 @@ app.event("user_change", async ({event, client, logger}) => {
             logger.warn(`No Manager set for ${user.id}`);
             return;                 //quit if no manager
        }
-
-    if (!ALLOWEDU.has(user.id)) return;
-
-    //skip guest accuounts - multi-channel or single-channel
-    if (user.is_restricted || user.is_ultra_restricted) return;
     
     //payload to put into fetch
     const payload = {
         inputs:{
             userID: {
-                value: "U08SMCV0TEK"//user.id
+                value: user.id
             },
             managerID: {
-                value: "U081D2JG5AB"//managerId
+                value: managerId
             }
         }
     }
-    await fetch(WORKFLOW_TRIGGER, {
+    await fetch(process.env.WORKFLOW_TRIGGER_LINK!, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(payload)
@@ -69,7 +70,7 @@ app.event("user_change", async ({event, client, logger}) => {
     await client.chat.postMessage({
 
         channel: managerId,
-        text: `A new teammate <@${user.id}> just joined. Add them to channels?`,
+        text: `A new teammate <@${user.id}> just joined. Add them to channels?`
         /*blocks: [
             {
             type: "section",
