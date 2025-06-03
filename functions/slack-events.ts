@@ -48,7 +48,7 @@ app.event("user_change", async ({event, client, logger}) => {
        }
     
     //payload to put into fetch
-    const payload = {
+    /*const payload = {
         inputs:{
             userID: {
                 value: user.id
@@ -57,21 +57,24 @@ app.event("user_change", async ({event, client, logger}) => {
                 value: managerId
             }
         }
-    }
+    }*/
     await fetch(process.env.WORKFLOW_TRIGGER_LINK!, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(payload)
+        body: JSON.stringify({
+            "userID": user.id,
+            "managerID": managerId
+            })
     });
         
     
 
     //send manager a DM with a button that opens to workflow link
-    await client.chat.postMessage({
+    //await client.chat.postMessage({
 
-        channel: managerId,
-        text: `A new teammate <@${user.id}> just joined. Add them to channels?`,
-        blocks: [
+        //channel: managerId,
+        //text: `A new teammate <@${user.id}> just joined. Add them to channels?`,
+        /*blocks: [
             {
             type: "section",
             text: {
@@ -90,9 +93,9 @@ app.event("user_change", async ({event, client, logger}) => {
                 value: user.id //optional metadata string the workflow can read
             }]
             }
-        ]
+        ]*/
 
-    });
+    //});
     console.log("sent DM")
 });
 
