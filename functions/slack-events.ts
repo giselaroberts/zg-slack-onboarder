@@ -20,7 +20,7 @@ const app = new App({
 
 //shortcuts to env values
 const FIELD_ID = process.env.MANAGER_FIELD_ID!; //'!' tells ts it will exist
-//const WORKFLOW = process.env.WORKFLOW_LINK!;
+const WORKFLOW = process.env.WORKFLOW_LINK!;
 const WORKFLOW_TRIGGER= process.env.WORKFLOW_TRIGGER_LINK!;
 
 const ALLOWEDU = new Set ([
@@ -70,8 +70,8 @@ app.event("user_change", async ({event, client, logger}) => {
     await client.chat.postMessage({
 
         channel: managerId,
-        text: `A new teammate <@${user.id}> just joined. Add them to channels?`
-        /*blocks: [
+        text: `A new teammate <@${user.id}> just joined. Add them to channels?`,
+        blocks: [
             {
             type: "section",
             text: {
@@ -90,7 +90,7 @@ app.event("user_change", async ({event, client, logger}) => {
                 value: user.id //optional metadata string the workflow can read
             }]
             }
-        ]*/
+        ]
 
     });
     console.log("sent DM")
