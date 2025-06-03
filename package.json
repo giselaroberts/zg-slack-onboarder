@@ -24,7 +24,8 @@
   "dependencies": {
     "@netlify/functions": "^1.6.0",
     "@slack/bolt": "^4.4.0",
-    "dotenv": "^16.5.0"
+    "dotenv": "^16.5.0",
+    "node-fetch": "^3.3.2"
   },
   "devDependencies": {
     "@types/node": "^22.15.21",
