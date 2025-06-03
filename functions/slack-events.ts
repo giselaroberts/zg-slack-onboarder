@@ -33,10 +33,10 @@ app.event("user_change", async ({event, client, logger}) => {
     console.log(user.id)
     //fetch the user's full profile so we can see manager field
     const prof = await client.users.profile.get({user: user.id});
-    const managerID: string | undefined = prof.profile?.fields?.[FIELD_ID]?.value;
+    const managerId: string | undefined = prof.profile?.fields?.[FIELD_ID]?.value;
 
     //Is this the correct wat to handle this case??
-    if(!managerID){
+    if(!managerId){
             logger.warn(`No Manager set for ${user.id}`);
             return;                 //quit if no manager
        }
@@ -45,14 +45,22 @@ app.event("user_change", async ({event, client, logger}) => {
 
     //skip guest accuounts - multi-channel or single-channel
     if (user.is_restricted || user.is_ultra_restricted) return;
-
+    
+    //payload to put into fetch
+    const payload = {
+        inputs:{
+            userID: {
+                value: user.id
+            },
+            managerID: {
+                value: managerId
+            }
+        }
+    }
     await fetch(WORKFLOW_TRIGGER, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
-            userID: user.id,
-            managerID: managerID
-        })
+        body: JSON.stringify(payload)
     });
         
     
@@ -60,8 +68,8 @@ app.event("user_change", async ({event, client, logger}) => {
     //send manager a DM with a button that opens to workflow link
     await client.chat.postMessage({
 
-        channel: managerID,
-        text: 'A new teammate <@${user.id}> just joined. Add them to channels?',
+        channel: managerId,
+        text: `A new teammate <@${user.id}> just joined. Add them to channels?`,
         /*blocks: [
             {
             type: "section",
