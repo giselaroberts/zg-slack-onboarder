@@ -54,7 +54,7 @@ app.event("user_change", async ({event, client, logger}) => {
     await client.chat.postMessage({
         //channel: managerID,
         channel: user.id,
-        text: `A new teammate <@${user.id}> just joined. Add them to channels?`+ `<${url.toString()}|Add to channels>`
+        text: `A new teammate <@${user.id}> just joined. Add them to channels?`+ `<${url.toString()}| >`
         /*blocks: [
             {
             type: "section",
