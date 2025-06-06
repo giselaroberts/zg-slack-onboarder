@@ -22,6 +22,8 @@ const WORKFLOW = process.env.WORKFLOW_LINK!;
 const ALLOWEDU = new Set ([
     "U08SMCV0TEK",
 ]);
+const url = new URL(process.env.WORKFLOW_LINK!);
+url.searchParams.set("user_id", user.id)
 
 
 //event handler - once per new slack member
@@ -45,11 +47,14 @@ app.event("user_change", async ({event, client, logger}) => {
             return;                 //quit if no manager
        }
 
+    const url = new URL(process.env.WORKFLOW_LINK!);
+    //url.searchParams.set("user_id", user.id)
+
     //send manager a DM with a button that opens to workflow link
     await client.chat.postMessage({
         channel: managerID,
-        text: `A new teammate <@${user.id}> just joined. Add them to channels?`,
-        blocks: [
+        text: `A new teammate <@${user.id}> just joined. Add them to channels?`+ `${url.toString()}`
+        /*blocks: [
             {
             type: "section",
             text: {
@@ -69,7 +74,7 @@ app.event("user_change", async ({event, client, logger}) => {
                 value: user.id //optional metadata string the workflow can read
             }]
             }
-        ]
+        ]*/
     });
     console.log("Sent DM");
 });
