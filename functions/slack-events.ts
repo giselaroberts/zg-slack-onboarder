@@ -54,7 +54,7 @@ app.event("user_change", async ({event, client, logger}) => {
     await client.chat.postMessage({
         //channel: managerID,
         channel: user.id,
-        text: `A new teammate <@${user.id}> just joined. Add them to channels?`+ url.toString()
+        text: `A new teammate <@${user.id}> just joined. Add them to channels?`+ `<https://slack.com/shortcuts/Ft08TNR34NF4/77af71442fcb7374e5e55dc738873dfc|add>`
         /*blocks: [
             {
             type: "section",
