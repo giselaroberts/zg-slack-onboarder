@@ -1,6 +1,6 @@
 //Import libraries
 import type {Handler, HandlerEvent, HandlerContext, HandlerCallback} from "@netlify/functions";
-import {App, AwsLambdaReceiver} from "@slack/bolt";
+import {App, AwsLambdaReceiver, LogLevel} from "@slack/bolt";
 import "dotenv/config";
 
 //Bolt receiver built for Lambda works for Netlify functions too ->
@@ -13,6 +13,7 @@ const receiver = new AwsLambdaReceiver({
 const app = new App({
     token:      process.env.SLACK_BOT_TOKEN, //bot OAuth token
     receiver,
+    logLevel: LogLevel.DEBUG,
 });
 
 
@@ -23,7 +24,7 @@ const ALLOWEDU = new Set ([
     "U08SMCV0TEK",
 ]);
 const url = new URL(process.env.WORKFLOW_LINK!);
-url.searchParams.set("user_id", user.id)
+//url.searchParams.set("user_id", user.id)
 
 
 //event handler - once per new slack member
