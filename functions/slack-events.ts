@@ -49,12 +49,11 @@ app.event("user_change", async ({event, client, logger}) => {
        }
 
     const url = new URL(process.env.WORKFLOW_LINK!);
-    //url.searchParams.set("user_id", user.id)
 
     //send manager a DM with a button that opens to workflow link
     await client.chat.postMessage({
         channel: managerID,
-        text: `A new teammate <@${user.id}> just joined. Add them to channels?`+ `${url.toString()}`
+        text: `A new teammate <@${user.id}> just joined. Add them to channels?`+ `${url}`
         /*blocks: [
             {
             type: "section",
