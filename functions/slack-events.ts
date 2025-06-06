@@ -65,6 +65,7 @@ app.event("user_change", async ({event, client, logger}) => {
                 type: "button",
                 text: {type: "plain_text", text: "Add to channels:"},
                 url: WORKFLOW, 
+                action_id: "button",
                 value: user.id //optional metadata string the workflow can read
             }]
             }
