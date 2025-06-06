@@ -78,7 +78,7 @@ app.event("user_change", async ({event, client, logger}) => {
     });
     console.log("Sent DM");
 });
-app.action('button', ({ ack }) => ack());
+//app.action('button', ({ ack }) => ack());
 
 //Netlify Function export 
 
