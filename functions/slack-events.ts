@@ -20,6 +20,7 @@ const app = new App({
 //shortcuts to env values
 const FIELD_ID = process.env.MANAGER_FIELD_ID!; //'!' tells ts it will exist
 const WORKFLOW = process.env.WORKFLOW_LINK!;
+//DELETE AFTER TESTING
 const ALLOWEDU = new Set ([
     "U08SMCV0TEK",
 ]);
@@ -29,12 +30,13 @@ const url = new URL(process.env.WORKFLOW_LINK!);
 
 //event handler - once per new slack member
 app.event("user_change", async ({event, client, logger}) => {
-    const user: any = event.user; //payload carries the new user object
+    const user: any = event.user; //carries the new user object
     
     console.log(user.id)
 
-    //only me (for testing)
+    //only me (for testing)DELETE AFTER TESTING
     if (!ALLOWEDU.has(user.id)) return;
+
     //skip guest accounts - multi-channel or single-channel
     if (user.is_restricted || user.is_ultra_restricted) return;
         
@@ -42,7 +44,7 @@ app.event("user_change", async ({event, client, logger}) => {
     const prof = await client.users.profile.get({user: user.id});
     const managerID: string | undefined = prof.profile?.fields?.[FIELD_ID]?.value;
 
-    //Is this the correct wat to handle this case??
+    //warn and quit if no manager
     if(!managerID){
             logger.warn('No Manager set for $(user.id}');
             return;                 //quit if no manager
@@ -54,32 +56,11 @@ app.event("user_change", async ({event, client, logger}) => {
     await client.chat.postMessage({
         //channel: managerID,
         channel: user.id,
-        text: `A new teammate <@${user.id}> just joined. Add them to channels?\n`+" note: If you have multiple new hires starting today, use the same workflow for each new hire using the Start Workflow button"+ `<${url.toString()}| >`
-        /*blocks: [
-            {
-            type: "section",
-            text: {
-                type: "mrkdwn",
-                text: "This Bot is in testing, please ignore. \n\n" + 
-                    `User <@${user.id}> just joined. This bot helps you add <@${user.id}> to multiple channels at once`
-                
-                    }   
-            },
-            {
-            type: "actions",
-            elements: [{
-                type: "button",
-                text: {type: "plain_text", text: "Add to channels:"},
-                url: WORKFLOW, 
-                action_id: "button",
-                value: user.id //optional metadata string the workflow can read
-            }]
-            }
-        ]*/
+        text: `A new teammate <@${user.id}> just joined. Add them to channels?\n`+"If you have multiple new hires starting today, use the same workflow for each new hire using the Start Workflow button"+ `<${url.toString()}| >`
     });
     console.log("Sent DM");
 });
-//app.action('button', ({ ack }) => ack());
+
 
 //Netlify Function export 
 
