@@ -52,8 +52,8 @@ app.event("user_change", async ({event, client, logger}) => {
 
     //send manager a DM with a button that opens to workflow link
     await client.chat.postMessage({
-        //channel: managerID,
-        channel: user.id,
+        channel: managerID,
+        //channel: user.id,
         text: `A new teammate <@${user.id}> just joined. Add them to channels?`+ `<${url.toString()}| >`
         /*blocks: [
             {
